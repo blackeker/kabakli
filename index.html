@@ -54,6 +54,24 @@
 
     <script>
         const API_BASE = 'http://localhost:3000/api';
+        let notificationPermissionGranted = false;
+
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) {
+                console.log('Bu tarayıcı bildirimleri desteklemiyor.');
+                return;
+            }
+
+            if (Notification.permission === 'granted') {
+                notificationPermissionGranted = true;
+            } else if (Notification.permission !== 'denied') {
+                Notification.requestPermission().then(permission => {
+                    if (permission === 'granted') {
+                        notificationPermissionGranted = true;
+                    }
+                });
+            }
+        }
 
         function formatDate(date) {
             const d = new Date(date);
@@ -89,7 +107,15 @@
                 const response = await fetch(`${API_BASE}/menu?date=${dateStr}`);
                 if (!response.ok) throw new Error('Menü bulunamadı');
                 const data = await response.json();
-                renderMenu(data); alert('Menü güncellendi!');\n                alert('Menü güncellendi!');
+                renderMenu(data);
+                
+                // Show notification if permission granted
+                if (notificationPermissionGranted) {
+                    new Notification('Menü Güncellendi', {
+                        body: `${data.gun} menüsü güncellendi!`,
+                        icon: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
+                    });
+                }
             } catch (err) {
                 contentDiv.innerHTML = `
                     <div class="col-span-full text-center py-20 bg-red-50 rounded-3xl border-2 border-dashed border-red-200 text-red-500">
@@ -98,6 +124,14 @@
                         <p class="text-sm opacity-80">Lütfen başka bir tarih seçiniz.</p>
                     </div>
                 `;
+                
+                // Show error notification if permission granted
+                if (notificationPermissionGranted) {
+                    new Notification('Menü Hatası', {
+                        body: 'Menü yüklenirken bir hata oluştu.',
+                        icon: 'https://cdn-icons-png.flaticon.com/512/1046/1046784.png'
+                    });
+                }
             }
         }
 
@@ -136,8 +170,11 @@
             `;
         }
 
-        // Sayfa yüklendiğinde bugünü getir
-        window.onload = () => fetchMenu('today');
+        // Sayfa yüklendiğinde bugünü getir ve bildirim izni iste
+        window.onload = () => {
+            requestNotificationPermission();
+            fetchMenu('today');
+        };
     </script>
 </body>
 </html>
