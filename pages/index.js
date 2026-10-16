@@ -15,10 +15,17 @@ const useMenu = (date) => {
         return;
       }
 
+      // Format date as DD.MM.YYYY for API
+      const formattedDate = date.toLocaleDateString('tr-TR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
+      }).replace(/\./g, '.'); // Already in DD.MM.YYYY format for tr-TR
+
       setLoading(true);
       setError(null);
       try {
-        const response = await fetch(`/api/menu?date=${date}`);
+        const response = await fetch(`/api/menu?date=${formattedDate}`);
         if (!response.ok) {
           throw new Error('Menu not found');
         }
