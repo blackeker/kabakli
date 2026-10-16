@@ -27,7 +27,5 @@ html {
 
 /* Prevent text selection during drag/interaction */
 * {
-  @apply -webkit-user-select:text;
-  @apply -moz-user-select:text;
-  @apply user-select:text;
+  @apply select-text;
 }
