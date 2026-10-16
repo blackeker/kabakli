@@ -166,17 +166,17 @@ const DatePicker = ({ selectedDate, onDateChange, minDate, maxDate }) => {
         </div>
       </div>
       <div className="px-4 pb-5">
-        <div className="grid grid-cols-7 gap-2 text-center text-sm font-medium text-gray-500">
+        <div className="grid grid-cols-7 gap-3 text-center text-sm font-medium text-gray-500">
           {/* Days of week header */}
           {['Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt', 'Pazar'].map((day, index) => (
             <div key={index}>{day}</div>
           ))}
         </div>
-        <div className="mt-2 grid grid-cols-7 gap-2">
+        <div className="mt-2 grid grid-cols-7 gap-3">
           {/* Calendar days */}
           {days.map((day, index) => {
             if (day === null) {
-              return <div key={index} className="h-10"></div>;
+              return <div key={index} className="h-12"></div>;
             }
 
             const date = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
@@ -189,7 +189,7 @@ const DatePicker = ({ selectedDate, onDateChange, minDate, maxDate }) => {
                 key={index}
                 onClick={() => !disabled && selectDate(date)}
                 disabled={disabled}
-                className={`h-10 w-full rounded ${isSelected
+                className={`h-12 w-full min-w-[48px] rounded ${isSelected
                   ? 'bg-indigo-600 text-white'
                   : isToday
                   ? 'bg-indigo-100 text-indigo-600'
@@ -209,13 +209,7 @@ const DatePicker = ({ selectedDate, onDateChange, minDate, maxDate }) => {
 export default function Home() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [notificationPermission, setNotificationPermission] = useState(false);
-  const { data, loading, error } = useMenu(
-    selectedDate.toLocaleDateString('tr-TR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    }).replace(/\//g, '.')
-  );
+  const { data, loading, error } = useMenu(selectedDate);
 
   useEffect(() => {
     // Request notification permission
