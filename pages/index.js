@@ -20,7 +20,7 @@ const useMenu = (date) => {
         day: '2-digit',
         month: '2-digit',
         year: 'numeric'
-      }).replace(/\./g, '.'); // Already in DD.MM.YYYY format for tr-TR
+      });
 
       setLoading(true);
       setError(null);
