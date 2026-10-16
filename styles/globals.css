@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles for better touch targets and mobile optimization */
+@layer base {
+  * {
+    @apply touch-manipulation;
+  }
+  
+  button, [role="button"] {
+    @apply min-h-[44px] min-w-[44px];
+  }
+  
+  /* Improve tap targets on iOS */
+  @media (-webkit-touch-callout: none), (-webkit-user-select: none) {
+    button, [role="button"], input, textarea, select, a {
+      @apply min-h-[44px] min-w-[44px];
+    }
+  }
+}
+
+/* Smooth scrolling for better UX */
+html {
+  @apply scroll-smooth;
+}
+
+/* Prevent text selection during drag/interaction */
+* {
+  @apply -webkit-user-select:text;
+  @apply -moz-user-select:text;
+  @apply user-select:text;
+}
